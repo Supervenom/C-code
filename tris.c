@@ -52,11 +52,13 @@ int pari (int x[3][3])
 	return 0;
 }
 
-int mossa (int x[3][3], int giocatore, int i, int j)
+int mossa (int x[3][3], int giocatore, int i, int j, int con)
 {
 	int k, h, m[3][3];
 	
-	for (k=0; k<3; k++) {
+	//printf("%i\n", con);
+    
+    for (k=0; k<3; k++) {
 		for (h=0;h<3;h++){
 			m[k][h]=x[k][h];
 		}
@@ -69,20 +71,15 @@ int mossa (int x[3][3], int giocatore, int i, int j)
 		return vincente(m);//provvisorio
 	}
 	
-	/*if (pari(m)) {
+	if (pari(m)) {
 		//printf("Giocatore %d, %d / %d (2° IF)\n", giocatore, i+1, j+1);
 		return 3;
 	}
-	m[i][j]=giocatore;
-	for (k=0; k<3; k++) {
-		for (h=0;h<3;h++){
-			if (m[k][h]==0) { 
-				if (mossa(m, 3-giocatore, k, h)==giocatore  || mossa(m, 3-giocatore, k, h)== 3) {   //prova
-					return giocatore;
-				}
-			}
-		}
-	}*/
+    for (k=0; k<3; k++) {
+        for (h=0;h<3;h++) {
+            return mossa(m, 3-giocatore, k, h, con+1);    //prova
+        }
+	}
 	
 	return 0;
 }
@@ -95,7 +92,7 @@ int mossa_random (int x[3][3], int giocatore)
 		for (j=0;j<3;j++){
 			if (x[i][j]==0) { 
 				x[i][j]=giocatore;
-				printf("Giocatore %d, %d / %d\n", giocatore, i+1, j+1);
+				printf("Giocatore %d, %d / %d  (mossa random)\n", giocatore, i+1, j+1);
 				return 0;
 			}
 		}
@@ -109,19 +106,20 @@ int gioca (int x[3][3], int giocatore)
 	
 	for (a=0; a<3; a++) {
 		for (b=0; b<3; b++) {
-			if (mossa(x, giocatore, a, b)!=0) {
+			if (mossa(x, giocatore, a, b, 0)==giocatore || mossa(x, giocatore, a, b, 0)==3) {
 				x[a][b]=giocatore;
 				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
 				return 1;
 			}
-			if (mossa(x, 3-giocatore, a, b)!=0) {
+			if (mossa(x, 3-giocatore, a, b, 0)==3-giocatore || mossa(x, 3-giocatore, a, b, 0)==3) {
 				x[a][b]=giocatore;
 				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
 				return 1;
-			}
+			}/*
             x[a][b]=giocatore;
             if (gioca(x, 3-giocatore)==0) return 1; //Fare prova con schema già iniziato
             x[a][b]=0;
+            */
 		}
 	}
 	
@@ -143,7 +141,6 @@ int main () {
 		}
 	}
 	while (vincente(x)==0 && pari(x)==0) {
-		printf("Turno %d\n", i+1);
 		gioca(x, giocatore);
 		giocatore = 3-giocatore;
     }
