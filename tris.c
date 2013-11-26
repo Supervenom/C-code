@@ -119,6 +119,9 @@ int gioca (int x[3][3], int giocatore)
 				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
 				return 1;
 			}
+            x[a][b]=giocatore;
+            if (gioca(x, 3-giocatore)==0) return 1; //Fare prova con schema già iniziato
+            x[a][b]=0;
 		}
 	}
 	
@@ -140,7 +143,6 @@ int main () {
 		}
 	}
 	while (vincente(x)==0 && pari(x)==0) {
-   //Da sistemare un po' meglio
 		printf("Turno %d\n", i+1);
 		gioca(x, giocatore);
 		giocatore = 3-giocatore;
