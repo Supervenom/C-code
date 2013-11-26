@@ -52,31 +52,6 @@ int pari (int x[3][3])
 	return 0;
 }
 
-
-int gioca (int x[3][3], int giocatore)
-{
-	int a,b;
-	
-	for (a=0; a<3; a++) {
-		for (b=0; b<3; b++) {
-			if (mossa(x, giocatore, a, b)!=0) {
-				x[a][b]=giocatore;
-				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return 1;
-			}
-			if (mossa(x, 3-giocatore, a, b)!=0) {
-				x[a][b]=giocatore;
-				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return 1;
-			}
-		}
-	}
-	
-	mossa_random(x, giocatore);
-	
-	return 0;
-}
-
 int mossa (int x[3][3], int giocatore, int i, int j)
 {
 	int k, h, m[3][3];
@@ -127,6 +102,33 @@ int mossa_random (int x[3][3], int giocatore)
 	}
 }
 
+
+int gioca (int x[3][3], int giocatore)
+{
+	int a,b;
+	
+	for (a=0; a<3; a++) {
+		for (b=0; b<3; b++) {
+			if (mossa(x, giocatore, a, b)!=0) {
+				x[a][b]=giocatore;
+				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
+				return 1;
+			}
+			if (mossa(x, 3-giocatore, a, b)!=0) {
+				x[a][b]=giocatore;
+				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
+				return 1;
+			}
+		}
+	}
+	
+	mossa_random(x, giocatore);
+	
+	return 0;
+}
+
+
+
 int main () {
 	
 	int x[3][3];
@@ -137,17 +139,14 @@ int main () {
 			x[i][j]=0;
 		}
 	}
-	for (i = 0; i<9; i++) {
-		if (vincente(x)==0 && pari(x)==0) {           //Da sistemare un po' meglio
-			printf("Turno %d\n", i+1);
-			gioca(x, giocatore);
-			giocatore = 3-giocatore;
-		}
-		else {
-			printf("Vince %d\n", vincente(x));
-			return 0;
-		}
-	}
-	printf("Avete pareggiato");
-	return 0;
+	while (vincente(x)==0 && pari(x)==0) {
+   //Da sistemare un po' meglio
+		printf("Turno %d\n", i+1);
+		gioca(x, giocatore);
+		giocatore = 3-giocatore;
+    }
+        
+	if (vincente(x)) printf("Vince %d\n", vincente(x));
+	if (pari(x)) printf("Avete pareggiato");
+    return 0;
 } 
