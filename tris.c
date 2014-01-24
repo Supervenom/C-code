@@ -63,7 +63,7 @@ void stampa (int x[3][3])
     }
     printf("\n\n");
 }
-
+int gioca (int x[3][3], int giocatore);
 int mossa (int x[3][3], int giocatore, int i, int j, int con)
 {
 	int k, h, m[3][3];
@@ -90,12 +90,15 @@ int mossa (int x[3][3], int giocatore, int i, int j, int con)
 		//printf("Giocatore %d, %d / %d (2° IF)\n", giocatore, i+1, j+1);
 		return 3;
 	}*/
-    for (k=0; k<3; k++) {
-        for (h=0;h<3;h++) {
-            //printf("Entrata\n");
-            if (mossa(m, 3-giocatore, k, h, con+1)) return mossa(m, 3-giocatore, k, h, con+1);    //prova
-        }
-	}
+    
+    if (con==1) {
+        for (k=0; k<3; k++) {
+            for (h=0;h<3;h++) {
+                //printf("Entrata\n");
+                if (gioca(m, 3-giocatore)) return gioca(m, 3-giocatore);    //prova
+            }
+	    }
+    }
 	
 	return 0;
 }
@@ -125,16 +128,29 @@ int gioca (int x[3][3], int giocatore)
 			if (mossa(x, giocatore, a, b, 0)==giocatore || mossa(x, giocatore, a, b, 0)==3) {
 				x[a][b]=giocatore;
 				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return mossa(x, giocatore, a, b, 0);
+				return 1;
 			}
-			if (mossa(x, 3-giocatore, a, b, 10)==3-giocatore) {
+			if (mossa(x, 3-giocatore, a, b, 0)==3-giocatore) {
 				x[a][b]=giocatore;
 				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return mossa(x, 3-giocatore, a, b, 0);
+				return 1;
 			}		
         }
 	}
-           
+    for (a=0; a<3; a++) {
+		for (b=0; b<3; b++) {
+			if (mossa(x, giocatore, a, b, 1)==giocatore || mossa(x, giocatore, a, b, 1)==3) {
+				x[a][b]=giocatore;
+				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
+				return 1;
+			}
+			if (mossa(x, 3-giocatore, a, b, 1)==3-giocatore) {
+				x[a][b]=giocatore;
+				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
+				return 1;
+			}		
+        }
+	}      
     /*for (a=0; a<3; a++) {
 		for (b=0; b<3; b++) {
             if (x[a][b]==0) {
@@ -163,7 +179,7 @@ int gioca (int x[3][3], int giocatore)
 int main () {
 	
 	int x[3][3]={{0,1,2},
-                 {2,0,0},
+                 {2,1,0},
                  {0,0,1}
                 };
 	int i, j, giocatore=2;
