@@ -49,7 +49,7 @@ void acquisisci (nodo *t)
 	fclose(stream);
 }
 
-scambia(nodo *t, nodo *min)
+void scambia(nodo *t, nodo *min)
 {
 	int tmp, i;
 	tmp = t->a;
@@ -77,6 +77,17 @@ void primo(nodo *t, nodo *testa, nodo *min)
 	primo(t->next, testa, min);
 }
 
+void write(nodo * t)
+{
+    FILE *stream = fopen ("data.txt", "w");
+    fprintf(stream, "\n");
+    while (t!=NULL) {
+        fprintf(stream, "%d", t->a);
+        t = t->next;
+    }
+
+}
+
 
 int main()
 {
@@ -93,5 +104,6 @@ int main()
     printf("\n");
     primo(t, t, min);
     print(t);
+    write(t);
     return 0;
 }
