@@ -70,6 +70,8 @@ void primo(nodo *t, nodo *testa, nodo *min)
 	}
 	if (t->next==NULL) {
 		scambia(testa, min);
+		print(testa);
+		printf("\n");
 		if ((testa->next)->next!=NULL) 
 			primo(testa->next, testa->next, NULL);
 		return;
