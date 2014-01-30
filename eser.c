@@ -78,7 +78,6 @@ void primo(nodo *t, nodo *testa, nodo *min)
 	primo(t->next, testa, min);
 }
 
-<<<<<<< HEAD
 void primo_iter(nodo *t, nodo *testa, nodo *min)
 {
 	while (t!=NULL) {
@@ -101,7 +100,7 @@ void primo_iter(nodo *t, nodo *testa, nodo *min)
 	}
 
 }
-=======
+
 void write(nodo * t)
 {
     FILE *stream = fopen ("data.txt", "w");
@@ -112,8 +111,6 @@ void write(nodo * t)
     }
 
 }
-
->>>>>>> cb3975790540b59c54885d7e3a5cf84ad51bbc65
 
 int main()
 {
@@ -129,6 +126,6 @@ int main()
     printf("\n");
     primo(t, t, min);
     print(t);
-    write(t);
+    //write(t);
     return 0;
 }
