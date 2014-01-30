@@ -54,7 +54,6 @@ void scambia(nodo *t, nodo *min)
 	int tmp;
 	tmp = t->a;
 	t->a=min->a;
-	//printf("min->next->a: %d\n", (min->next)->a);
 	(min->next)->a = tmp;
 }
 
