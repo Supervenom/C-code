@@ -41,19 +41,20 @@ void print (nodo *t)
 void acquisisci (nodo *t)
 
 {
-	int a, b=0;
+	int a;
 	FILE *stream = fopen("data.txt", "r");
 	while (fscanf(stream, "%d", &a)==1) {
-		add(t, a);
+		add2(t, a);
 	}
 	fclose(stream);
 }
 
-scambia(nodo *t, nodo *min)
+void scambia(nodo *t, nodo *min)
 {
-	int tmp, i;
+	int tmp;
 	tmp = t->a;
 	t->a=min->a;
+	//printf("min->next->a: %d\n", (min->next)->a);
 	(min->next)->a = tmp;
 }
 
@@ -62,7 +63,7 @@ void primo(nodo *t, nodo *testa, nodo *min)
 	if (min==NULL) {
 		min = malloc(sizeof(nodo));
 		min->a = t->a;
-		min->next = NULL;
+		min->next = t;
 	}
 	if (t->a < min->a) {
 		min->a = t->a;
@@ -77,6 +78,28 @@ void primo(nodo *t, nodo *testa, nodo *min)
 	primo(t->next, testa, min);
 }
 
+void primo_iter(nodo *t, nodo *testa, nodo *min)
+{
+	while (t!=NULL) {
+		if (min==NULL) {
+			min = malloc(sizeof(nodo));
+			min->a = t->a;
+			min->next = t;
+		}
+		if (t->a < min->a) {
+			min->a = t->a;
+			min->next = t;
+		}
+		if (t->next==NULL) {
+			scambia(testa, min);
+			if ((testa->next)->next!=NULL) 
+				primo_iter(testa->next, testa->next, NULL);
+			return;
+		}
+		t = t->next;
+	}
+
+}
 
 int main()
 {
@@ -88,7 +111,6 @@ int main()
     t2->a = 3;
     t2->next = NULL;
     acquisisci(t);
-    add2(t, 4);
     print(t);
     printf("\n");
     primo(t, t, min);
