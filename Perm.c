@@ -11,7 +11,17 @@
  end;*/
  
 #include <stdio.h>
+
+#define LEN 4
  
+
+int stampa_vettore(int vettore[])
+{
+	 int i;
+	 for(i=0;i<LEN;i++)
+ 		 printf("%d\t",vettore[i]);
+	 printf("\n");
+}
 
 void scambia(int v[], int a, int b)
 {
@@ -21,7 +31,7 @@ void scambia(int v[], int a, int b)
 	v[b] = tmp;
 }
 
-void enumera(int i, int v[], n, int v_max[], int max)
+void enumera(int i, int v[])
 {
 	int k;
 	if (i==LEN) stampa_vettore(v);
