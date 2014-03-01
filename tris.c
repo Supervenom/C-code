@@ -67,6 +67,15 @@ void stampa (int x[3][3])
 int gioca (int x[3][3], int giocatore) 
 {
 	int i, j;
+	
+	for (i=0; i<3; i++)
+		for (j=0; j<3; j++) {
+				if (x[i][j]==0 && mossa_ovvia(x, giocatore, i, j)!=0) {
+					x[i][j] = giocatore;
+					return giocatore;
+				}
+		}
+	
 	for (i=0; i<3; i++)
 		for (j=0; j<3; j++) {
 				if (x[i][j]==0 && mossa(x, giocatore, i, j)!=0) {
@@ -75,13 +84,51 @@ int gioca (int x[3][3], int giocatore)
 				}
 		}
 		
+	gioca_p(x, giocatore);
+	//if(!gioca_p(x, giocatore)) mossa_random(x, giocatore);
+		
+}
+
+int gioca_p (int x[3][3], int giocatore) 
+{
+	int i, j;
+	
 	for (i=0; i<3; i++)
 		for (j=0; j<3; j++) {
-				if (x[i][j]==0 && mossa_p(x, giocatore, i, j)!=0) {
+				if (x[i][j]==0 && mossa_ovvia(x, giocatore, i, j)!=0) {
 					x[i][j] = giocatore;
 					return giocatore;
 				}
 		}
+	
+	for (i=0; i<3; i++) {
+		for (j=0; j<3; j++) {
+				if (x[i][j]==0 && mossa_p(x, giocatore, i, j)!=0) {
+					x[i][j] = giocatore;
+					//stampa(x);
+					//printf("ok1\n");
+					return 3;
+				}
+		}
+	}
+	//printf("ok1\n");
+}
+
+int mossa_ovvia(int x[3][3], int giocatore, int i, int j)
+
+{
+	int x_copia[3][3], k, l;
+	for (k=0; k<3; k++) {
+		for (l=0; l<3; l++) {
+			x_copia[k][l] = x[k][l];
+		}
+	}
+	x_copia[i][j] = giocatore;
+	if (vincente(x_copia) != 0) {
+		//printf("Giocatore %d\n", giocatore);
+		return giocatore;
+	}
+	return 0;
 }
 
 int mossa (int x[3][3], int giocatore, int i, int j)
@@ -98,7 +145,7 @@ int mossa (int x[3][3], int giocatore, int i, int j)
 		return giocatore;
 	}
 	if (gioca(x_copia, 3-giocatore) == 3-giocatore) return 0;
-	//printf("prova\n");
+	//printf("ok2\n");
 	return 1;
 }
 
@@ -111,12 +158,18 @@ int mossa_p (int x[3][3], int giocatore, int i, int j)
 		}
 	}
 	x_copia[i][j] = giocatore;
-	if (pari(x_copia)) {
+	//printf("Giocatore %d\n", giocatore);
+	//stampa(x_copia);
+	if (vincente(x_copia) == giocatore) {
 		//printf("Giocatore %d\n", giocatore);
 		return giocatore;
 	}
-	if (gioca(x_copia, 3-giocatore) == 3-giocatore) return 0;
-	//printf("prova\n");
+	if (pari(x_copia)) {
+		//printf("Pari %d  %d\n", i, j);
+		return 3;
+	}
+	if (gioca_p(x_copia, 3-giocatore) == 3-giocatore) return 0;
+	//printf("ok2_p\n");
 	return 1;
 }
 	
@@ -129,6 +182,7 @@ int mossa_random (int x[3][3], int giocatore)
 			if (x[i][j]==0) { 
 				x[i][j]=giocatore;
 				printf("Giocatore %d, %d / %d  (mossa random)\n", giocatore, i+1, j+1);
+				stampa(x);
 				return 0;
 			}
 		}
@@ -142,16 +196,19 @@ int mossa_random (int x[3][3], int giocatore)
 
 int main () {
 	
-	int x[3][3]={{1,0,0},
+	int x[3][3]={{0,0,0},
                  {0,0,0},
-                 {0,0,1}
+                 {0,0,0}
                 };
-	int i= 0, j, giocatore=1;
+	int i=0, j, giocatore=1;
 	stampa(x);
 	while (vincente(x)==0 && pari(x)==0) {
+		//if (i==1) break;
 		gioca(x, giocatore);
 		giocatore = 3-giocatore;
-        stampa(x);
+        printf("Mossa\n");
+		stampa(x);
+        i++;
     }
         
 	if (vincente(x)) printf("Vince %d\n", vincente(x));
