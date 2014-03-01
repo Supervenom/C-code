@@ -63,44 +63,61 @@ void stampa (int x[3][3])
     }
     printf("\n\n");
 }
-int gioca (int x[3][3], int giocatore);
-int mossa (int x[3][3], int giocatore, int i, int j, int con)
+
+int gioca (int x[3][3], int giocatore) 
 {
-	int k, h, m[3][3];
-	
-	
-    
-    for (k=0; k<3; k++) {
-		for (h=0;h<3;h++){
-			m[k][h]=x[k][h];
+	int i, j;
+	for (i=0; i<3; i++)
+		for (j=0; j<3; j++) {
+				if (x[i][j]==0 && mossa(x, giocatore, i, j)!=0) {
+					x[i][j] = giocatore;
+					return giocatore;
+				}
+		}
+		
+	for (i=0; i<3; i++)
+		for (j=0; j<3; j++) {
+				if (x[i][j]==0 && mossa_p(x, giocatore, i, j)!=0) {
+					x[i][j] = giocatore;
+					return giocatore;
+				}
+		}
+}
+
+int mossa (int x[3][3], int giocatore, int i, int j)
+{
+	int x_copia[3][3], k, l;
+	for (k=0; k<3; k++) {
+		for (l=0; l<3; l++) {
+			x_copia[k][l] = x[k][l];
 		}
 	}
-	
-	if (m[i][j]!=0) return 0; 
-	//printf("%i\t", con);
-    m[i][j]=giocatore;
-    //stampa(m);
-    //printf("Giocatore %d, %d / %d\n", giocatore, i+1, j+1);
-	if (vincente(m)==giocatore) {
-		//printf("Giocatore %d, %d / %d (1° IF)\n", giocatore, i+1, j+1);
-		return vincente(m);//provvisorio
+	x_copia[i][j] = giocatore;
+	if (vincente(x_copia) == giocatore) {
+		//printf("Giocatore %d\n", giocatore);
+		return giocatore;
 	}
-	
-	/*if (pari(m)) {
-		//printf("Giocatore %d, %d / %d (2° IF)\n", giocatore, i+1, j+1);
-		return 3;
-	}*/
-    
-    if (con==1) {
-        for (k=0; k<3; k++) {
-            for (h=0;h<3;h++) {
-                //printf("Entrata\n");
-                if (gioca(m, 3-giocatore)) return gioca(m, 3-giocatore);    //prova
-            }
-	    }
-    }
-	
-	return 0;
+	if (gioca(x_copia, 3-giocatore) == 3-giocatore) return 0;
+	//printf("prova\n");
+	return 1;
+}
+
+int mossa_p (int x[3][3], int giocatore, int i, int j)
+{
+	int x_copia[3][3], k, l;
+	for (k=0; k<3; k++) {
+		for (l=0; l<3; l++) {
+			x_copia[k][l] = x[k][l];
+		}
+	}
+	x_copia[i][j] = giocatore;
+	if (pari(x_copia)) {
+		//printf("Giocatore %d\n", giocatore);
+		return giocatore;
+	}
+	if (gioca(x_copia, 3-giocatore) == 3-giocatore) return 0;
+	//printf("prova\n");
+	return 1;
 }
 	
 int mossa_random (int x[3][3], int giocatore) 
@@ -119,80 +136,22 @@ int mossa_random (int x[3][3], int giocatore)
 }
 
 
-int gioca (int x[3][3], int giocatore)
-{
-	int a,b,k,h, m[3][3];
-	
-	for (a=0; a<3; a++) {
-		for (b=0; b<3; b++) {
-			if (mossa(x, giocatore, a, b, 0)==giocatore || mossa(x, giocatore, a, b, 0)==3) {
-				x[a][b]=giocatore;
-				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return 1;
-			}
-			if (mossa(x, 3-giocatore, a, b, 0)==3-giocatore) {
-				x[a][b]=giocatore;
-				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return 1;
-			}		
-        }
-	}
-    for (a=0; a<3; a++) {
-		for (b=0; b<3; b++) {
-			if (mossa(x, giocatore, a, b, 1)==giocatore || mossa(x, giocatore, a, b, 1)==3) {
-				x[a][b]=giocatore;
-				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return 1;
-			}
-			if (mossa(x, 3-giocatore, a, b, 1)==3-giocatore) {
-				x[a][b]=giocatore;
-				printf("Giocatore %d, %d / %d \n", giocatore, a+1, b+1);
-				return 1;
-			}		
-        }
-	}      
-    /*for (a=0; a<3; a++) {
-		for (b=0; b<3; b++) {
-            if (x[a][b]==0) {
-                x[a][b]=giocatore;
-                for (k=0; k<3; k++) {
-		            for (h=0;h<3;h++){
-			            m[k][h]=x[k][h];
-		            }
-	            }
-                if (gioca(m, 3-giocatore)==giocatore) return 1; //Fare prova con schema già iniziato
-                x[a][b]=0;
-            }
-        }
-    }*/
 
-
-
-	
-	//mossa_random(x, giocatore);
-	
-	return 0;
-}
 
 
 
 int main () {
 	
-	int x[3][3]={{0,1,2},
-                 {2,1,0},
+	int x[3][3]={{1,0,0},
+                 {0,0,0},
                  {0,0,1}
                 };
-	int i, j, giocatore=2;
-	
-	/*for (i=0; i<3; i++) {
-		for (j=0;j<3;j++){
-			x[i][j]=0;
-		}
-	}*/
+	int i= 0, j, giocatore=1;
+	stampa(x);
 	while (vincente(x)==0 && pari(x)==0) {
 		gioca(x, giocatore);
 		giocatore = 3-giocatore;
-        //stampa(x);
+        stampa(x);
     }
         
 	if (vincente(x)) printf("Vince %d\n", vincente(x));
