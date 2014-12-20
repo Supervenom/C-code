@@ -12,7 +12,7 @@
  
 #include <stdio.h>
 
-#define LEN 4
+#define LEN 9
  
 
 int stampa_vettore(int vettore[])
@@ -44,10 +44,13 @@ void enumera(int i, int v[])
 
 int main()
 {
-	 int vett[]={21, 10, 14, 5};
+	 int vett[]={21, 10, 14, 5, 6, 4, 7, 8, 9};
 	 enumera(0, vett);
 }
 
+/*real	0m22.133s
+user	0m0.348s
+sys	0m3.618s */
 
 
 

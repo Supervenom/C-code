@@ -1,5 +1,13 @@
 #include <stdio.h>
 
+
+int mossa_ovvia(int x[3][3], int giocatore, int i, int j);
+int gioca (int x[3][3], int giocatore);
+int gioca_p (int x[3][3], int giocatore);
+int mossa (int x[3][3], int giocatore, int i, int j);
+int mossa_p (int x[3][3], int giocatore, int i, int j);
+
+
 int vincente(int x[3][3]){
 	int i;
 	int j;
@@ -84,7 +92,17 @@ int gioca (int x[3][3], int giocatore)
 				}
 		}
 		
-	gioca_p(x, giocatore);
+	/*for (i=0; i<3; i++) {
+		for (j=0; j<3; j++) {
+				if (x[i][j]==0 && mossa_p(x, giocatore, i, j)!=0) {
+					x[i][j] = giocatore;
+					//stampa(x);
+					//printf("ok1\n");
+					return 3;
+				}
+		}
+	}	*/
+	gioca_p(x, giocatore);	
 	//if(!gioca_p(x, giocatore)) mossa_random(x, giocatore);
 		
 }
@@ -111,7 +129,6 @@ int gioca_p (int x[3][3], int giocatore)
 				}
 		}
 	}
-	//printf("ok1\n");
 }
 
 int mossa_ovvia(int x[3][3], int giocatore, int i, int j)
@@ -124,6 +141,11 @@ int mossa_ovvia(int x[3][3], int giocatore, int i, int j)
 		}
 	}
 	x_copia[i][j] = giocatore;
+	if (vincente(x_copia) != 0) {
+		//printf("Giocatore %d\n", giocatore);
+		return giocatore;
+	}
+	x_copia[i][j] = 3-giocatore;
 	if (vincente(x_copia) != 0) {
 		//printf("Giocatore %d\n", giocatore);
 		return giocatore;
@@ -190,7 +212,12 @@ int mossa_random (int x[3][3], int giocatore)
 }
 
 
-
+int gioca_umano (int x[3][3], int giocatore)
+{
+	int i;
+	scanf("%d", &i);
+	x[i/10][i%10]= giocatore;
+}
 
 
 
@@ -204,7 +231,8 @@ int main () {
 	stampa(x);
 	while (vincente(x)==0 && pari(x)==0) {
 		//if (i==1) break;
-		gioca(x, giocatore);
+		if (giocatore%2==0) gioca(x, giocatore);
+		else gioca_umano(x, giocatore);
 		giocatore = 3-giocatore;
         printf("Mossa\n");
 		stampa(x);
